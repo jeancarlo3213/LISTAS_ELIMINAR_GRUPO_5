@@ -1,0 +1,84 @@
+﻿@page "/"
+@using LISTAS_ELIMINAR_GRUPO_5.Modelos;
+@using LISTAS_ELIMINAR_GRUPO_5.Services;
+
+<PageTitle>Home</PageTitle>
+
+<h1>GRUPO 5</h1>
+
+<div>
+    <input class="form-check form-control m-2" type="text" style="width:180px;height:40px;"placeholder="INFORMACION" @bind="Informacion" />
+    <input class="form-check form-control m-2" type="text" style="width:180px;height:40px;"placeholder="DATO X" @bind="Datox" />
+    <input class="form-check form-control m-2" type="number" style="width:180px;height:40px;"  @bind="posicion" />
+    <button class="btn btn-primary" @onclick="OrdenarLista">ORDENAR LISTA</button>
+
+</div>
+<hr />
+<div>
+    <button class="btn btn-dark "@onclick="AgregarAlInicio"> AGREGAR AL INICIO</button>
+    <button class="btn btn-dark"@onclick=" AgregarAlFinal">AGREGAR AL FINAL </button>
+    <hr />
+    <button class="btn btn-danger" @onclick="EliminarAlFinal"> ELIMINAR AL FINAL </button>
+    <button class="btn btn-danger" @onclick="EliminarAlInicio">ELIMINAR AL INICIO </button>
+    <hr />
+    <button class="btn btn-danger" @onclick="EliminarAntesDeDatoX">ELIMINAR ANTES DE DATO X</button>
+    <button class="btn btn-danger" @onclick="EliminarDespuesDeDatoX">ELIMINAR DESPUES DE DATO X</button>
+    <button class="btn btn-danger" @onclick="EliminarEnPosicionEspesifica">ELIMINAR EN POSICION ESPESIFICA</button>
+
+
+</div>
+<div>
+    <ul>
+        @foreach(var item in Listas)
+        {
+            <li>@item</li>
+        }
+    </ul>
+</div>
+<hr />
+<div>
+    @if (!string.IsNullOrEmpty(Mensaje))
+    {
+        <p class=" alert-info">@Mensaje</p>
+    }
+</div>
+
+@code{
+    public string Informacion {get;set;}
+    public string Mensaje =string.Empty;
+    public ListasEnlazadasSimples Listas {get;set;}=new();
+    public string Datox { get; set; }
+    public int posicion;
+
+    void AgregarAlFinal(){
+        Nodo nuevonodo = new Nodo(Informacion);
+        Mensaje = Listas.AgregarAlFinal(nuevonodo);
+        this.Informacion = string.Empty;
+    }
+    void AgregarAlInicio (){
+        Nodo nuevonodo = new Nodo(Informacion);
+        Mensaje = Listas.AgregarAlInicio(nuevonodo);
+        this.Informacion = string.Empty;
+    }
+    void EliminarAlFinal(){
+        Mensaje = Listas.EliminarNodoAlFinal();
+    }
+    void EliminarAlInicio(){
+        Mensaje = Listas.EliminarAlInicio();
+    }
+    void EliminarAntesDeDatoX(){
+        Mensaje = Listas.EliminarAntesdeunDatoX(Datox);
+    }
+    void EliminarDespuesDeDatoX(){
+        Mensaje = Listas.EliminarDespuesDeDatoX(Datox);
+    }
+    void EliminarEnPosicionEspesifica(){
+        Mensaje = Listas.EliminarEnPosicion(posicion);
+    }
+    void OrdenarLista()
+    {
+        Listas.OrdenarLista();
+        Mensaje = "La lista ha sido ordenada.";
+    }
+
+}
